@@ -1,10 +1,10 @@
-<!-- Statistics Calculator -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Statistics Calculator</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <style>
         * {
             margin: 0;
@@ -308,10 +308,6 @@
                     <input type="checkbox" id="quartiles">
                     <label for="quartiles">Quartiles</label>
                 </div>
-                <div class="checkbox-item">
-                    <input type="checkbox" id="boxplot">
-                    <label for="boxplot">Box Plot</label>
-                </div>
             </div>
         </div>
 
@@ -434,7 +430,7 @@
                         ? 'Cannot calculate (std deviation = 0)'
                         : numbers.map(num => ((num - mean) / stdDev).toFixed(4)).join(', ');
                 }
-                if (document.getElementById('quartiles').checked || document.getElementById('boxplot').checked) {
+                if (document.getElementById('quartiles').checked {
                     const q1 = quartile(sorted, 0.25);
                     const q2 = quartile(sorted, 0.5);
                     const q3 = quartile(sorted, 0.75);
@@ -443,17 +439,7 @@
                         results.Q3 = q3.toFixed(4);
                         results.IQR = (q3 - q1).toFixed(4);
                     }
-                    if (document.getElementById('boxplot').checked) {
-                        results.boxPlotData = {
-                            min: sorted[0],
-                            q1,
-                            median: q2,
-                            q3,
-                            max: sorted[sorted.length - 1]
-                        };
-                    }
                 }
-
                 displayResults(results, currentNumbers);
             } catch (error) {
                 errorDiv.textContent = '❌ ' + error.message;
@@ -479,7 +465,6 @@
             let html = '';
 
             Object.entries(results).forEach(([key, value]) => {
-                if (key === 'boxPlotData') return;
                 html += `
                     <div class="result-item">
                         <div class="result-label">${labels[key] || key}:</div>
@@ -490,81 +475,6 @@
 
             resultsDiv.innerHTML = html;
             resultsDiv.classList.add('show');
-
-            if (document.getElementById('boxplot').checked && numbers.length > 0) {
-                drawBoxPlot(numbers);
-            } else {
-                document.getElementById('boxPlotContainer').classList.remove('show');
-            }
-        }
-
-        function drawBoxPlot(numbers) {
-            const sorted = [...numbers].sort((a, b) => a - b);
-            const min = sorted[0];
-            const max = sorted[sorted.length - 1];
-            const q1 = quartile(sorted, 0.25);
-            const median = quartile(sorted, 0.5);
-            const q3 = quartile(sorted, 0.75);
-
-            const canvas = document.getElementById('boxPlot');
-            const ctx = canvas.getContext('2d');
-            const pixelRatio = window.devicePixelRatio || 1;
-            const width = canvas.offsetWidth;
-            const height = 180;
-            canvas.width = width * pixelRatio;
-            canvas.height = height * pixelRatio;
-            ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
-
-            const padding = 40;
-            const plotWidth = width - padding * 2;
-            const plotY = 58;
-            const plotHeight = 46;
-            const range = max - min || 1;
-            const scale = value => padding + ((value - min) / range) * plotWidth;
-
-            ctx.clearRect(0, 0, width, height);
-            ctx.fillStyle = '#081116';
-            ctx.fillRect(0, 0, width, height);
-
-            ctx.strokeStyle = '#00d1b2';
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.moveTo(scale(min), plotY + plotHeight / 2);
-            ctx.lineTo(scale(max), plotY + plotHeight / 2);
-            ctx.stroke();
-
-            ctx.lineWidth = 3;
-            ctx.beginPath();
-            ctx.moveTo(scale(min), plotY + 10);
-            ctx.lineTo(scale(min), plotY + plotHeight + 10);
-            ctx.moveTo(scale(max), plotY + 10);
-            ctx.lineTo(scale(max), plotY + plotHeight + 10);
-            ctx.stroke();
-
-            const boxLeft = scale(q1);
-            const boxWidth = Math.max(6, scale(q3) - scale(q1));
-            ctx.fillStyle = 'rgba(0, 209, 178, 0.22)';
-            ctx.fillRect(boxLeft, plotY, boxWidth, plotHeight);
-            ctx.strokeStyle = '#00b1d2';
-            ctx.lineWidth = 2;
-            ctx.strokeRect(boxLeft, plotY, boxWidth, plotHeight);
-
-            ctx.strokeStyle = '#ffffff';
-            ctx.lineWidth = 3;
-            ctx.beginPath();
-            ctx.moveTo(scale(median), plotY);
-            ctx.lineTo(scale(median), plotY + plotHeight);
-            ctx.stroke();
-
-            ctx.fillStyle = '#d9fffb';
-            ctx.textAlign = 'center';
-            ctx.font = '12px Arial';
-            [min, q1, median, q3, max].forEach(value => {
-                ctx.fillText(value.toFixed(2), scale(value), plotY + plotHeight + 24);
-            });
-
-            document.getElementById('boxPlotContainer').classList.add('show');
-        }
 
         document.getElementById('numbers').addEventListener('keydown', function(event) {
             const value = this.value.trim().toLowerCase();
