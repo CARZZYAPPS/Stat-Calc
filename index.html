@@ -160,8 +160,7 @@
         }
 
         .results,
-        .error,
-        #boxPlotContainer {
+        .error {
             border-radius: 18px;
         }
 
@@ -214,18 +213,6 @@
         }
 
         .error.show {
-            display: block;
-        }
-
-        #boxPlotContainer {
-            display: none;
-            margin-top: 20px;
-            padding: 18px;
-            background: rgba(2, 18, 28, 0.92);
-            border: 1px solid rgba(0, 209, 178, 0.14);
-        }
-
-        #boxPlotContainer.show {
             display: block;
         }
 
@@ -321,16 +308,13 @@
 
         <div class="error" id="error"></div>
         <div class="results" id="results"></div>
-        <div id="boxPlotContainer">
-            <canvas id="boxPlot"></canvas>
-        </div>
     </div>
 
     <script>
         let currentNumbers = [];
 
         function calculateAll() {
-            const ids = ['mean', 'median', 'mode', 'range', 'std', 'variance', 'zscore', 'count', 'quartiles', 'boxplot'];
+            const ids = ['mean', 'median', 'mode', 'range', 'std', 'variance', 'zscore', 'count', 'quartiles'];
             ids.forEach(id => document.getElementById(id).checked = true);
             calculate();
         }
@@ -356,10 +340,8 @@
         function calculate() {
             const errorDiv = document.getElementById('error');
             const resultsDiv = document.getElementById('results');
-            const boxPlotContainer = document.getElementById('boxPlotContainer');
             errorDiv.classList.remove('show');
             resultsDiv.classList.remove('show');
-            boxPlotContainer.classList.remove('show');
 
             try {
                 let input = document.getElementById('numbers').value.trim();
@@ -383,7 +365,7 @@
                 const numbers = parseNumbers(input);
                 if (numbers.length === 0) throw new Error('No valid numbers found.');
 
-                const optionIds = ['mean', 'median', 'mode', 'range', 'std', 'variance', 'zscore', 'count', 'quartiles', 'boxplot'];
+                const optionIds = ['mean', 'median', 'mode', 'range', 'std', 'variance', 'zscore', 'count', 'quartiles'];
                 if (!optionIds.some(id => document.getElementById(id).checked)) {
                     throw new Error('Select at least one output option.');
                 }
@@ -490,11 +472,6 @@
             }
         });
 
-        window.addEventListener('resize', () => {
-            if (document.getElementById('boxPlotContainer').classList.contains('show')) {
-                drawBoxPlot(currentNumbers);
-            }
-        });
     </script>
 </body>
 </html>
