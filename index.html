@@ -307,10 +307,6 @@ max-width: 100%;
 <input type="checkbox" id="quartiles">
 <label for="quartiles">Quartiles</label>
 </div>
-<div class="checkbox-item">
-<input type="checkbox" id="boxplot">
-<label for="boxplot">Box Plot</label>
-</div>
 </div>
 </div>
 
@@ -321,16 +317,13 @@ max-width: 100%;
 
 <div class="error" id="error"></div>
 <div class="results" id="results"></div>
-<div id="boxPlotContainer">
-<canvas id="boxPlot"></canvas>
-</div>
 </div>
 
 <script>
 let currentNumbers = [];
 
 function calculateAll() {
-const ids = ['mean', 'median', 'mode', 'range', 'std', 'variance', 'zscore', 'count', 'quartiles', 'boxplot'];
+const ids = ['mean', 'median', 'mode', 'range', 'std', 'variance', 'zscore', 'count', 'quartiles'];
 ids.forEach(id => document.getElementById(id).checked = true);
 calculate();
 }
@@ -383,7 +376,7 @@ document.getElementById('numbers').value = input;
 const numbers = parseNumbers(input);
 if (numbers.length === 0) throw new Error('No valid numbers found.');
 
-const optionIds = ['mean', 'median', 'mode', 'range', 'std', 'variance', 'zscore', 'count', 'quartiles', 'boxplot'];
+const optionIds = ['mean', 'median', 'mode', 'range', 'std', 'variance', 'zscore', 'count', 'quartiles'];
 if (!optionIds.some(id => document.getElementById(id).checked)) {
 throw new Error('Select at least one output option.');
 }
