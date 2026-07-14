@@ -421,6 +421,7 @@ displayResults(results, currentNumbers);
 } catch (error) {
 errorDiv.textContent = '❌ ' + error.message;
 errorDiv.classList.add('show');
+document.location.href = '#error';
 }
 }
 
