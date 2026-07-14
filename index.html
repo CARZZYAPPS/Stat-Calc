@@ -284,7 +284,8 @@ max-width: 100%;
 <input type="checkbox" id="count">
 <label for="count">Count</label>
 </div>
-<div class="checkbox-item">
+<!-- Id is result for anchor when displaying results -->
+<div class="checkbox-item" id="result">
 <input type="checkbox" id="quartiles">
 <label for="quartiles">Quartiles</label>
 </div>
@@ -452,7 +453,7 @@ html += `
 
 resultsDiv.innerHTML = html;
 resultsDiv.classList.add('show');
-document.location.href = '#results';
+document.location.href = '#result';
 }
 
 
